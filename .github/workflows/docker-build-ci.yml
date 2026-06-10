@@ -1,0 +1,52 @@
+name: Build Docker Images and Push to Docker Hub
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Frontend Docker Image and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./zuriapp-frontend-main
+          push: true
+          tags: munirihzowe/zuriapp-frontend:latest
+          
+      - name: Build Backend Docker Image and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./zuriapp-backend-main
+          push: true
+          tags: munirihzowe/zuriapp-backend:latest
+          
+      - name: Test Frontend Docker image
+        run: |
+          docker run -d --name test-container -p 5000:5000 munirihzowe/zuriapp-frontend:latest
+          sleep 5
+          docker ps | grep test-container
+          docker logs test-container
+          docker stop test-container
+
+      - name: Test Backend Docker image
+        run: |
+          docker run -d --name test-container -p 5000:5000 munirihzowe/zuriapp-backend:latest
+          sleep 5
+          docker ps | grep test-container
+          docker logs test-container
+          docker stop test-container
