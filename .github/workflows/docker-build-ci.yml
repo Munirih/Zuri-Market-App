@@ -39,7 +39,7 @@ jobs:
           
       - name: Test Frontend Docker image
         run: |
-          docker run -d --name test-container -p 5000:5000 munirihzowe/zuriapp-frontend:latest
+          docker run -d --name test-frontend -p 3000:3000 munirihzowe/zuriapp-frontend:latest
           sleep 5
           docker ps | grep test-container
           docker logs test-container
@@ -47,7 +47,7 @@ jobs:
 
       - name: Test Backend Docker image
         run: |
-          docker run -d --name test-container -p 5000:5000 munirihzowe/zuriapp-backend:latest
+          docker run -d --name test-backend -p 5000:5000 munirihzowe/zuriapp-backend:latest
           sleep 5
           docker ps | grep test-container
           docker logs test-container
