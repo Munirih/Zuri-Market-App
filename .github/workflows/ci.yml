@@ -1,0 +1,51 @@
+name: Build and Test Node.js App
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: |
+          zuriapp-backend-main/package-lock.json
+          zuriapp-frontend-main/package-lock.json
+
+    - name: Install dependencies in backend
+      run: npm install 
+      working-directory: zuriapp-backend-main
+      
+    - name: Start backend
+      run: npm start &
+      working-directory: zuriapp-backend-main
+        
+    - name: Install dependencies in frontend
+      run: npm install
+      working-directory: zuriapp-frontend-main
+      
+    - name: Start frontend
+      run: npm run dev &
+      working-directory: zuriapp-frontend-main 
+
+    - name: Wait for servers
+      run: |
+          sleep 5
+          
+    - name: Test backend
+      run: curl http://localhost:5000
+
+    - name: Test frontend
+      run: curl http://localhost:3000
