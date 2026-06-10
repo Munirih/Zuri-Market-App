@@ -1,0 +1,18 @@
+services:
+  backend-app:
+    container_name: backend-app
+    restart: unless-stopped
+    build: ./zuriapp-backend-main
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./zuriapp-backend-main/.env
+
+  frontend-app:
+    container_name: frontend-app
+    restart: unless-stopped
+    build: ./zuriapp-frontend-main
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./zuriapp-frontend-main/.env

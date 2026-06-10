@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: zuriapp-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: zuriapp-backend
+  template:
+    metadata:
+      labels:
+        app: zuriapp-backend
+    spec:
+      containers:
+      - name: zuriapp-backend
+        image: zuriapp-backend:latest
+        ports:
+        - containerPort: 5000      
