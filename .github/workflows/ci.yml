@@ -40,7 +40,7 @@ jobs:
       
     - name: Start frontend
       run: npm run dev &
-      working-directory: zuriapp-front-main 
+      working-directory: zuriapp-frontend-main 
 
     - name: Wait for servers
       run: |
@@ -51,7 +51,3 @@ jobs:
 
     - name: Test frontend
       run: curl http://localhost:3000
-
-    
- 
-  
