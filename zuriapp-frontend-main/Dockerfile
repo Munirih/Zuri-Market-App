@@ -1,4 +1,5 @@
-FROM node:26-alpine3.22
+# Build Stage
+FROM node:26-alpine3.22 AS builder
 
 WORKDIR /app
 
@@ -9,6 +10,7 @@ COPY . .
 
 RUN npm run build
 
+# Serve with Nginx
 FROM nginx:stable-alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
