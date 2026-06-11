@@ -42,7 +42,7 @@ jobs:
       run: curl http://localhost:5000
 
     - name: Test frontend
-      run: curl http://localhost:3000
+      run: curl http://localhost:5173
 
       
   docker:
@@ -77,7 +77,7 @@ jobs:
           
       - name: Test Frontend Docker image
         run: |
-          docker run -d --name test-frontend -p 3000:3000 munirihzowe/zuriapp-frontend:latest
+          docker run -d --name test-frontend -p 5173:5173 munirihzowe/zuriapp-frontend:latest
           sleep 5
           docker ps | grep test-frontend
           docker logs test-frontend
