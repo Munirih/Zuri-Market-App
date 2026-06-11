@@ -1,20 +1,14 @@
 # Build Stage
-FROM node:26-alpine3.22 AS builder
+FROM node:26-alpine3.22
 
 WORKDIR /app
 
 COPY package*.json ./
+
 RUN npm install
 
 COPY . .
 
-RUN npm run build
+EXPOSE 3000
 
-# Serve with Nginx
-FROM nginx:stable-alpine
-
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev", "--", "--host"]
