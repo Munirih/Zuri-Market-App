@@ -42,7 +42,7 @@ jobs:
       run: curl http://localhost:5000
 
     - name: Test frontend
-      run: curl http://localhost:3000
+      run: curl http://localhost:5173
 
       
   docker:
