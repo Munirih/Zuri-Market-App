@@ -1,14 +1,15 @@
-# Build Stage
-FROM node:26-alpine3.22
+FROM node:24-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
+RUN npm run build
+
 EXPOSE 3000
 
-CMD ["npm", "run", "dev", "--", "--host"]
+CMD ["npm", "run", "start"]
