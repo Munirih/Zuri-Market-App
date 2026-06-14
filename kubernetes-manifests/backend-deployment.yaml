@@ -18,4 +18,37 @@ spec:
       - name: zuriapp-backend
         image: munirihzowe/zuriapp-backend:latest
         ports:
-        - containerPort: 5000      
+        - containerPort: 5000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        env:
+          - name: API_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: zuri-k3s-secret
+                key: API_SECRET_KEY
+
+          - name: STORE_NAME
+            valueFrom:
+              secretKeyRef:
+                name: zuri-k3s-secret
+                key: STORE_NAME
+
+        volumeMounts:
+          - name: secrets-store
+            mountPath: "/mnt/secrets"
+            readOnly: true
+
+    volumes:
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "zuri-secrets"
+    
