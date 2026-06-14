@@ -79,10 +79,10 @@ jobs:
         run: |
           docker run -d --name test-frontend -p 8080:80 munirihzowe/zuriapp-frontend:latest
           sleep 5
-          docker ps | grep test-frontend
+          docker ps
           docker logs test-frontend
+          curl -f http://localhost:8080 || exit 1
           docker stop test-frontend
-
       - name: Test Backend Docker image
         run: |
           docker run -d --name test-backend -p 5000:5000 munirihzowe/zuriapp-backend:latest
