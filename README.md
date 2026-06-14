@@ -15,6 +15,7 @@ Refer this documentation [here](run-app-locally.md) for this section.
 
 ## 6. API endpoints
 
+Refer to this documentation [here](api-endpoints.md) for this section.
 
 ## 7. Docker 
 

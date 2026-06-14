@@ -16,19 +16,13 @@ spec:
     spec:
       containers:
       - name: zuriapp-frontend
-        image: munirihzowe/zuriapp-frontend:latest
+        image: munirihzowe/zuriapp-frontend
         ports:
         - containerPort: 80
         resources:
           requests:
+            cpu: "100m"
             memory: "128Mi"
-            cpu: "250m"
           limits:
+            cpu: "250m"
             memory: "256Mi"
-            cpu: "500m"
-        env:
-        - name: VITE_API_URL
-          value: "http://zuriapp-backend:5000"
-        
-
-      

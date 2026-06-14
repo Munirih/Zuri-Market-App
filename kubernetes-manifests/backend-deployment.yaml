@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: zuriapp-backend
-        image: munirihzowe/zuriapp-backend:latest
+        image: munirihzowe/zuriapp-backend
         ports:
         - containerPort: 5000
         resources:
