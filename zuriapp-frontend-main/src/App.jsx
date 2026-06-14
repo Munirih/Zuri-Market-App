@@ -6,7 +6,7 @@ import FilterBar from "./components/FilterBar";
 import ProductGrid from "./components/ProductGrid";
 import CartSidebar from "./components/CartSidebar";
 
-const API_URL = "/api";
+const API_URL = "";
 
 const App = () => {
   const [products, setProducts] = useState([]);
