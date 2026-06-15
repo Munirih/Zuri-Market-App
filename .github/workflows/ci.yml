@@ -1,8 +1,8 @@
-name: CI Workflow
+name: CI/CD Workflow
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [master]
 
 jobs:
   build:
@@ -66,27 +66,24 @@ jobs:
         with:
           context: ./zuriapp-frontend-main
           push: true
-          tags: munirihzowe/zuriapp-frontend:latest
+          tags: |
+            munirihzowe/zuriapp-frontend:${{ github.sha }}
+            munirihzowe/zuriapp-frontend:latest
           
       - name: Build Backend Docker Image and push
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@v6
         with:
           context: ./zuriapp-backend-main
           push: true
-          tags: munirihzowe/zuriapp-backend:latest
+          tags: |
+            munirihzowe/zuriapp-backend:${{ github.sha }}
+            munirihzowe/zuriapp-backend:latest
           
       - name: Test Frontend Docker image
         run: |
           docker network create test-net
-          docker run -d \
-            --network test-net \
-            --name backend-service \
-            nginx:alpine
-          docker run -d \
-            --network test-net \
-            --name test-frontend \
-            -p 8000:80 \
-            munirihzowe/zuriapp-frontend:latest
+          docker run -d --network test-net --name backend-service nginx:alpine
+          docker run -d --network test-net --name test-frontend -p 8000:80 munirihzowe/zuriapp-frontend:latest
           sleep 10
           curl -f http://localhost:8000
           docker stop test-frontend
@@ -98,3 +95,79 @@ jobs:
           docker ps | grep test-backend
           docker logs test-backend
           docker stop test-backend
+    
+  deploy:
+      name: Install K3s + Deploy App
+      runs-on: ubuntu-latest
+      needs: docker
+  
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+  
+        - name: Setup kubectl
+          uses: azure/setup-kubectl@v4
+  
+        - name: Setup Helm
+          uses: azure/setup-helm@v4
+            
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v6
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+
+        - name: Get Server public IP address by Tag
+          run: |
+            EC2_HOST=$(aws ec2 describe-instances \
+            --region ${{ secrets.AWS_REGION }} \
+            --filters "Name=tag:Name,Values=k3s-server" "Name=instance-state-name,Values=running" \
+            --query 'Reservations[0].Instances[0].PublicIpAddress' \
+            --output text)
+            echo "EC2_HOST=$EC2_HOST" >> $GITHUB_ENV
+
+        - name: Configure SSH
+          run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+
+        - name: Add EC2 host
+          run: |
+            ssh-keyscan -H $EC2_HOST 2>/dev/null >> ~/.ssh/known_hosts
+
+        - name: Copy manifests
+          run: |
+            scp -r ./kubernetes-manifests \
+              ${{ secrets.EC2_USER }}@$EC2_HOST:/tmp/
+
+        - name: Deploy Applications
+          run: |
+            ssh -T ${{ secrets.EC2_USER }}@$EC2_HOST << EOF
+            set -e
+            kubectl apply -f /tmp/kubernetes-manifests
+            
+            kubectl set image deployment/frontend \
+              frontend=munirihzowe/zuriapp-frontend:${{ github.sha }}
+              
+            kubectl set image deployment/backend \
+              backend=munirihzowe/zuriapp-backend:${{ github.sha }}
+              
+            kubectl rollout status deployment/frontend --timeout=300s
+            kubectl rollout status deployment/backend --timeout=300s
+            EOF
+
+        - name: Check Resources
+          run: |
+            ssh -T ${{ secrets.EC2_USER }}@$EC2_HOST << 'EOF'
+            echo "Pods:"
+            kubectl get pods
+            echo "Services:"
+            kubectl get svc
+            echo "Ingress:"
+            kubectl get ingress
+            EOF
+        - name: Deployment Info
+          run: |
+            echo "Application URL: http://$EC2_HOST"
