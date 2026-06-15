@@ -77,7 +77,7 @@ jobs:
           
       - name: Test Frontend Docker image
         run: |
-          docker run -d --name test-frontend -p 8080:80 munirihzowe/zuriapp-frontend:latest
+          docker pull munirihzowe/zuriapp-backend:latest
           sleep 5
           docker ps | grep test-backend
           docker logs test-frontend
