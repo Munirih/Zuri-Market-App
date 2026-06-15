@@ -77,10 +77,13 @@ jobs:
           
       - name: Test Frontend Docker image
         run: |
-          docker run -d --name test-frontend -p 3000:3000 munirihzowe/zuriapp-frontend:latest
+          docker run -d --name test-frontend -p 8000:8000 munirihzowe/zuriapp-frontend:latest
           sleep 5
-          docker ps | grep test-backend
+          docker ps -a
+          docker inspect test-frontend
           docker logs test-frontend
+          docker port test-frontend
+          docker ps
           docker stop test-frontend
       - name: Test Backend Docker image
         run: |
