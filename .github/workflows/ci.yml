@@ -77,7 +77,19 @@ jobs:
           
       - name: Test Frontend Docker image
         run: |
-           docker run --rm munirihzowe/zuriapp-frontend:latest nginx -t
+          docker network create test-net
+          docker run -d \
+            --network test-net \
+            --name backend-service \
+            nginx:alpine
+          docker run -d \
+            --network test-net \
+            --name test-frontend \
+            -p 8000:80 \
+            munirihzowe/zuriapp-frontend:latest
+          sleep 10
+          curl -f http://localhost:8000
+          docker stop test-frontend
           
       - name: Test Backend Docker image
         run: |
