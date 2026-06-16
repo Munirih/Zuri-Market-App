@@ -149,10 +149,10 @@ jobs:
             kubectl apply -f /tmp/kubernetes-manifests
             
             kubectl set image deployment/frontend \
-              frontend=munirihzowe/zuriapp-frontend:${{ github.sha }}
+              container-frontend=munirihzowe/zuriapp-frontend:${{ github.sha }}
               
             kubectl set image deployment/backend \
-              backend=munirihzowe/zuriapp-backend:${{ github.sha }}
+              container-backend=munirihzowe/zuriapp-backend:${{ github.sha }}
               
             kubectl rollout status deployment/frontend --timeout=300s
             kubectl rollout status deployment/backend --timeout=300s

@@ -15,7 +15,7 @@ spec:
         app: zuriapp-frontend
     spec:
       containers:
-      - name: zuriapp-frontend
+      - name: container-frontend
         image: munirihzowe/zuriapp-frontend
         ports:
         - containerPort: 80

@@ -15,7 +15,7 @@ spec:
         app: zuriapp-backend
     spec:
       containers:
-      - name: zuriapp-backend
+      - name: container-backend
         image: munirihzowe/zuriapp-backend
         ports:
         - containerPort: 5000
@@ -44,11 +44,11 @@ spec:
             mountPath: "/mnt/secrets"
             readOnly: true
 
-    volumes:
-      - name: secrets-store
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: "zuri-secrets"
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "zuri-secrets"
     
