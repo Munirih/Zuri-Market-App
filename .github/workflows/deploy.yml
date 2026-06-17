@@ -153,6 +153,7 @@ jobs:
           run: |
             ssh -T ${{ secrets.EC2_USER }}@$EC2_HOST << EOF
             set -e
+            export KUBECONFIG=/home/ubuntu/.kube/config
             kubectl apply -f /tmp/kubernetes-manifests/secret-provider.yaml
             kubectl apply -f /tmp/kubernetes-manifests/frontend-deployment.yaml
             kubectl apply -f /tmp/kubernetes-manifests/frontend-service.yaml
@@ -167,6 +168,7 @@ jobs:
         - name: Check Resources
           run: |
             ssh -T ${{ secrets.EC2_USER }}@$EC2_HOST << 'EOF'
+            export KUBECONFIG=/home/ubuntu/.kube/config
             echo "Pods:"
             kubectl get pods
             echo "Services:"
