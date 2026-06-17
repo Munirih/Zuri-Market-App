@@ -39,10 +39,10 @@ jobs:
           sleep 5
           
     - name: Test backend
-      run: curl http://localhost:5000
+      run: curl -f http://localhost:5000
 
     - name: Test frontend
-      run: curl http://localhost:3000
+      run: curl -f http://localhost:3000
 
       
   docker:
@@ -93,6 +93,7 @@ jobs:
           docker run -d --name test-backend -p 5000:5000 munirihzowe/zuriapp-backend:latest
           sleep 10
           docker ps | grep test-backend
+          curl -f http://localhost:5000
           docker logs test-backend
           docker stop test-backend
     
@@ -104,12 +105,6 @@ jobs:
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
-  
-        - name: Setup kubectl
-          uses: azure/setup-kubectl@v4
-  
-        - name: Setup Helm
-          uses: azure/setup-helm@v4
             
         - name: Configure AWS Credentials
           uses: aws-actions/configure-aws-credentials@v6
@@ -125,6 +120,12 @@ jobs:
             --filters "Name=tag:Name,Values=k3s-server" "Name=instance-state-name,Values=running" \
             --query 'Reservations[0].Instances[0].PublicIpAddress' \
             --output text)
+
+            if [ -z "$EC2_HOST" ] || [ "$EC2_HOST" == "None" ]; then
+              echo "Could not find a running k3s-server instance"
+              exit 1
+            fi
+
             echo "EC2_HOST=$EC2_HOST" >> $GITHUB_ENV
 
         - name: Configure SSH
@@ -141,32 +142,37 @@ jobs:
           run: |
             scp -r ./kubernetes-manifests \
               ${{ secrets.EC2_USER }}@$EC2_HOST:/tmp/
-
+        - name: Update image tags in manifests
+          run: |
+            ssh -T ${{ secrets.EC2_USER }}@$EC2_HOST << EOF
+            set -e
+            sed -i "s|image: munirihzowe/zuriapp-backend.*|image: munirihzowe/zuriapp-backend:${{ github.sha }}|" /tmp/kubernetes-manifests/*.yaml
+            sed -i "s|image: munirihzowe/zuriapp-frontend.*|image: munirihzowe/zuriapp-frontend:${{ github.sha }}|" /tmp/kubernetes-manifests/*.yaml
+            EOF
         - name: Deploy Applications
           run: |
             ssh -T ${{ secrets.EC2_USER }}@$EC2_HOST << EOF
             set -e
-            sudo kubectl apply -f /tmp/kubernetes-manifests
-            
-            sudo kubectl set image deployment/frontend \
-              container-frontend=munirihzowe/zuriapp-frontend:${{ github.sha }}
+            kubectl apply -f /tmp/kubernetes-manifests/secret-provider.yaml
+            kubectl apply -f /tmp/kubernetes-manifests/frontend-deployment.yaml
+            kubectl apply -f /tmp/kubernetes-manifests/frontend-service.yaml
+            kubectl apply -f /tmp/kubernetes-manifests/backend-deployment.yaml
+            kubectl apply -f /tmp/kubernetes-manifests/backend-service.yaml
+            kubectl apply -f /tmp/kubernetes-manifests/ingress.yaml
               
-            sudo kubectl set image deployment/backend \
-              container-backend=munirihzowe/zuriapp-backend:${{ github.sha }}
-              
-            sudo kubectl rollout status deployment/frontend --timeout=300s
-            sudo kubectl rollout status deployment/backend --timeout=300s
+            kubectl rollout status deployment/frontend --timeout=300s
+            kubectl rollout status deployment/backend --timeout=300s
             EOF
 
         - name: Check Resources
           run: |
             ssh -T ${{ secrets.EC2_USER }}@$EC2_HOST << 'EOF'
             echo "Pods:"
-            sudo kubectl get pods
+            kubectl get pods
             echo "Services:"
-            sudo kubectl get svc
+            kubectl get svc
             echo "Ingress:"
-            sudo kubectl get ingress
+            kubectl get ingress
             EOF
         - name: Deployment Info
           run: |
