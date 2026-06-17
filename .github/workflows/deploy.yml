@@ -39,7 +39,7 @@ jobs:
           sleep 5
           
     - name: Test backend
-      run: curl -f http://localhost:5000
+      run: curl -f http://localhost:5000/api/store
 
     - name: Test frontend
       run: curl -f http://localhost:3000
