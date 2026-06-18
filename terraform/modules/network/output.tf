@@ -1,6 +1,6 @@
 output "vpc_name" {
-    description = "Name of the VPC"
-    value       = aws_vpc.main.tags["Name"]
+  description = "Name of the VPC"
+  value       = aws_vpc.main.tags["Name"]
 }
 
 output "vpc_id" {

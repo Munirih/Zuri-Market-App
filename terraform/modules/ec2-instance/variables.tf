@@ -32,9 +32,9 @@ variable "vpc_id" {
 }
 
 variable "environment" {
-    description = "Enviroment tag (dev, staging, prod)"
-    type        = string
-    default     = "dev"
+  description = "Enviroment tag (dev, staging, prod)"
+  type        = string
+  default     = "dev"
 }
 
 

@@ -1,16 +1,16 @@
 resource "aws_security_group" "sg" {
-  name_prefix   = var.name
-  description   = "Security group with inbound rules for ${var.name}"
-  vpc_id        = var.vpc_id
+  name_prefix = var.name
+  description = "Security group with inbound rules for ${var.name}"
+  vpc_id      = var.vpc_id
 
-  tags   = {
+  tags = {
     Name = "${var.name}-sg"
   }
 
 }
 
 resource "aws_vpc_security_group_ingress_rule" "sg" {
-  count             = length(var.ingress_rules) 
+  count             = length(var.ingress_rules)
   security_group_id = aws_security_group.sg.id
 
   description = var.ingress_rules[count.index].description
@@ -23,9 +23,9 @@ resource "aws_vpc_security_group_ingress_rule" "sg" {
 resource "aws_vpc_security_group_egress_rule" "sg" {
   count             = length(var.egress_rules)
   security_group_id = aws_security_group.sg.id
-  from_port   = var.egress_rules[count.index].from_port
-  ip_protocol = var.egress_rules[count.index].protocol
-  to_port     = var.egress_rules[count.index].to_port
-  cidr_ipv4   = var.egress_rules[count.index].cidr_blocks[0]
-  
+  from_port         = var.egress_rules[count.index].from_port
+  ip_protocol       = var.egress_rules[count.index].protocol
+  to_port           = var.egress_rules[count.index].to_port
+  cidr_ipv4         = var.egress_rules[count.index].cidr_blocks[0]
+
 }

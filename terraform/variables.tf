@@ -1,7 +1,7 @@
 variable "aws_region" {
-    description = "AWS region where resources will be created"
-    type        = string
-    default     = "us-east-1"
+  description = "AWS region where resources will be created"
+  type        = string
+  default     = "us-east-1"
 }
 
 variable "ec2_key_name" {
