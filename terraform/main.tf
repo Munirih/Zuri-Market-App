@@ -63,12 +63,9 @@ module "securitygroup" {
 ]
 }
 
-module "secret-manager" {
-  source = "./modules/secret-manager"
-
-  secret_name     = "test3-secrets"
-  description     = "Zuri Market backend secrets"
-} 
+data "aws_secretsmanager_secret" "store" {
+  name = "zuri-app-secrets"
+}
 
 module "ec2-instance" {
   source  = "./modules/ec2-instance"
@@ -81,7 +78,7 @@ module "ec2-instance" {
   security_group_id  = module.securitygroup.security_group_id
   environment        = "prod"
   
-  secret_arn         = module.secret-manager.secret_arn
+  secret_arn         = data.aws_secretsmanager_secret.store.arn
   iam_role           = "zuriapp-ec2-role"
   iam_policy         = "zuriapp-secrets-policy"
   instance_profile   = "zuriapp-ec2-profile"
