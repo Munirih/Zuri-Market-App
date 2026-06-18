@@ -96,7 +96,7 @@ resource "aws_instance" "ec2" {
   user_data = <<-EOF
     #!/bin/bash
     apt update -y
-    curl -sfL https://get.k3s.io | sh -
+    curl -sfL https://get.k3s.io | sh -s -
     
     while [ ! -f /etc/rancher/k3s/k3s.yaml ]; do
       sleep 3
@@ -108,41 +108,6 @@ resource "aws_instance" "ec2" {
     echo 'export KUBECONFIG=/home/ubuntu/.kube/config' >> /home/ubuntu/.bashrc
     export KUBECONFIG=/home/ubuntu/.kube/config
     
-    ########################################
-    # Install Helm
-    ########################################
-
-    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
-    ########################################
-    # Install CSI Driver
-    ########################################
-
-    helm repo add secrets-store-csi-driver \
-      https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
-
-    ########################################
-    # Install AWS Provider
-    ########################################
-
-    helm repo add aws-secrets-manager \
-      https://aws.github.io/secrets-store-csi-driver-provider-aws
-
-    helm repo update
-
-    helm upgrade --install csi-secrets-store \
-      secrets-store-csi-driver/secrets-store-csi-driver \
-      --namespace kube-system \
-      --create-namespace \
-      --wait \
-      --timeout 5m
-
-    helm upgrade --install secrets-provider-aws \
-      aws-secrets-manager/secrets-store-csi-driver-provider-aws \
-      --namespace kube-system \
-      --wait \
-      --timeout 5m
-
     EOF
 
   tags = {

@@ -9,15 +9,5 @@ variable "description" {
   type        = string
 }
 
-variable "api_secret_key" {
-  description = "API key"
-  type        = string
-  sensitive   = true
-}
 
-
-variable "store_name" {
-  description = "Store name"
-  type        = string
-}
 
