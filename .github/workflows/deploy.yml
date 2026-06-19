@@ -33,7 +33,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -reconfigure
 
       
       - name: Fix Terraform formatting
@@ -44,7 +44,7 @@ jobs:
         run: terraform validate
         
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -replace="module.securitygroup.aws_vpc_security_group_egress_rule.sg[0]" -out=tfplan
         env:
           TF_VAR_key_name: ${{ secrets.AWS_SSH_KEY_NAME }}
         

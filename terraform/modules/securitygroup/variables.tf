@@ -13,8 +13,8 @@ variable "ingress_rules" {
   description = "A list of ingress rules to apply to the security group"
   type = list(object({
     description = string
-    from_port   = number
-    to_port     = number
+    from_port   = optional(number)
+    to_port     = optional(number)
     protocol    = string
     cidr_blocks = list(string)
   }))
@@ -24,8 +24,8 @@ variable "egress_rules" {
   description = "A list of egress rules to apply to the security group"
   type = list(object({
     description = string
-    from_port   = number
-    to_port     = number
+    from_port   = optional(number)
+    to_port     = optional(number)
     protocol    = string
     cidr_blocks = list(string)
   }))
