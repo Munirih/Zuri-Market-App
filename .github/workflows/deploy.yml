@@ -33,7 +33,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           
       - name: Terraform Init
-        run: terraform init -reconfigure
+        run: terraform init
 
       
       - name: Fix Terraform formatting
@@ -44,7 +44,7 @@ jobs:
         run: terraform validate
         
       - name: Terraform Plan
-        run: terraform plan -replace="module.securitygroup.aws_vpc_security_group_egress_rule.sg[0]" -out=tfplan
+        run: terraform plan -out=tfplan
         env:
           TF_VAR_key_name: ${{ secrets.AWS_SSH_KEY_NAME }}
         
@@ -58,7 +58,7 @@ jobs:
           echo "ec2_public_ip=$INSTANCE_IP" >> $GITHUB_OUTPUT
           echo "Instance IP: $INSTANCE_IP"
   build:
-    name: Build and Test Applications
+    name: Build, Test and Scan Application Dependencies for Vulnerabilities with Trivy
     needs: terraform-infrastructure
     runs-on: ubuntu-latest
     steps:
@@ -97,6 +97,35 @@ jobs:
 
     - name: Test frontend
       run: curl -f http://localhost:3000
+
+    
+    - name: Trivy Frontend Report
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: './zuriapp-frontend-main'
+        format: 'sarif'
+        output: 'frontend-trivy.sarif'
+
+    - name: Upload Frontend Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-trivy-report
+        path: frontend-trivy.sarif
+
+    - name: Trivy Backend Report
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: './zuriapp-backend-main'
+        format: 'sarif'
+        output: 'backend-trivy.sarif'
+
+    - name: Upload Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-trivy-report
+        path: backend-trivy.sarif
 
   docker-build:
     name: Build DockerImages and Scan for Vulnerabilities with Trivy

@@ -1,29 +1,25 @@
-# DevOps Capstone Project
+# Zuri Market e-commerce Platform Deployment to Kubernetes (K3s)
 
 ## 1. Project Overview
 
-## 2. Tech Stack
+This project demonstrates a DevSecOps deployment pipeline for a containerized full-stack application running on Kubernetes (K3s) hosted on AWS EC2.
 
-## 3. Project Structure
+The project demonstrates modern DevOps and DevSecOps practices including:
 
-## 4. Environment variables
+- AWS Infrastructure provisioning with Terraform
+- Remote Terraform State Management with state locking (S3 Bucket)
+- Containerization with Docker
+- GitHub Actions for Continuous Integration and Continuous Deployment (CI/CD)
+- Application Dependencies and Container Vulnerability Scanning using Trivy
+- Secret Management with AWS Secrets Manager
+- IAM Roles with least privilege for Secure Access
+- AWS SDK for runtime secrets retrieval
+- Application Deployment to Kubernetes Cluster using Deployments and Services and Ingress objects
 
-## 5. Running locally
-
-Refer this documentation [here](run-app-locally.md) for this section.
 
 
-## 6. API endpoints
+[Frontend Documentation](./documentation/frontend-documentation.md)
 
-Refer to this documentation [here](api-endpoints.md) for this section.
+[Backend Documentation](./documentation/backend-documentation.md)
 
-## 7. Docker 
-
-Refer to this documentation [here](docker-local-setup.md) for this section.
-
-## 8. Deployment
-
-## 9. Secrets
-
-## 10. Components Reference
 
