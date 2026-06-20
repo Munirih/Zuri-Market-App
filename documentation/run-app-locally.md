@@ -99,6 +99,7 @@ as seen in the image below
 
 ![backend-run-local](./images/image-1.png)
 
+
 ---
 
 ## 6. Run the frontend
