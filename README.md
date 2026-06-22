@@ -16,13 +16,13 @@ The project demonstrates modern DevOps and DevSecOps practices including:
 - AWS SDK for runtime secrets retrieval
 - Application Deployment to Kubernetes Cluster using Deployments and Services and Ingress objects
 
-
+## 2. Frontend and Backend Documentations
 
 [Frontend Documentation](./documentation/frontend-documentation.md)
 
 [Backend Documentation](./documentation/backend-documentation.md)
 
-## 2. Project Structure
+## 3. Project Structure
 
 ```tree
 project-root/
