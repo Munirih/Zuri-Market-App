@@ -64,7 +64,7 @@ module "securitygroup" {
 }
 
 data "aws_secretsmanager_secret" "store" {
-  name = "zuri-app-secrets"
+  name = "testing-secrets"
 }
 
 module "ec2-instance" {

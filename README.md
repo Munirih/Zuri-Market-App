@@ -70,7 +70,7 @@ project-root/
 
 | Path/File                                       | Purpose                       | What It Does                                                                                                                               |
 | ----------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `.github/workflows/`                            | CI/CD Pipelines               | Contains GitHub Actions workflows that automate terraform provisioning, testing, building, Docker image creation and Kubernetes deployment. |
+| `.github/workflows/`                            | CI/CD Pipelines               | Contains GitHub Actions workflows that automate terraform provisioning, testing, building, Docker image creation and Kubernetes deployment. (deploy.yaml and destroy.yaml) |
 | `kubernetes-manifests/`                         | Kubernetes Resources          | Contains all Kubernetes YAML files required to deploy and expose the application on a K3s cluster.                                         |
 | `kubernetes-manifests/backend-deployment.yaml`  | Backend Deployment            | Creates and manages backend application Pods.                                                                       |
 | `kubernetes-manifests/backend-service.yaml`     | Backend Service               | Exposes backend Pods within the internal Kubernetes cluster.                                                                        |
