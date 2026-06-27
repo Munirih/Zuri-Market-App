@@ -2,7 +2,7 @@
 
 ## 1. Project Overview
 
-This project demonstrates a DevSecOps deployment pipeline for a containerized full-stack application running on Kubernetes (K3s) hosted on AWS EC2.
+This project demonstrates DevSecOps deployment pipeline for a containerized full-stack application running on Kubernetes (K3s) hosted on AWS EC2.
 
 The project demonstrates modern DevOps and DevSecOps practices including:
 
@@ -16,13 +16,34 @@ The project demonstrates modern DevOps and DevSecOps practices including:
 - AWS SDK for runtime secrets retrieval
 - Application Deployment to Kubernetes Cluster using Deployments and Services and Ingress objects
 
-## 2. Frontend and Backend Documentations
+
+
+
+## 2. Architecture Diagram
+
+![architecture diagram](./documentation/images/architecture-diagram.png)
+
+
+
+## 3. Tech Stack
+
+ Frontend: React/Vite, Nginx
+
+ Backend: Node.js/Express.js, AWS SDK 
+
+ DevOps: Docker, Docker Hub, K3s (Kubernetes), Terraform, AWS Secrets Manager, AWS EC2, AWS VPC, AWS IAM,  Amazon S3 (with S3 Lockfile), GitHub Actions, Trivy.
+
+
+
+## 4. Frontend and Backend Documentations
 
 [Frontend Documentation](./documentation/frontend-documentation.md)
 
 [Backend Documentation](./documentation/backend-documentation.md)
 
-## 3. Project Structure
+
+
+## 5. Project Structure
 
 ```tree
 project-root/
@@ -84,7 +105,7 @@ project-root/
 | `modules/ec2-instance/`  | Compute Resources         | Defines EC2 instances and IAM role used to host the K3s cluster and application workloads.                                          |                                                |
 | `terraform/.gitignore`                          | Terraform Ignore Rules        | Prevents Terraform state files, sensitive data from being committed to Git.                                               |
 | `terraform/providers.tf`                        | Provider Configuration        | Defines cloud providers (e.g., AWS) and Terraform version requirements.                                                                    |
-| `backend.tf`                                    | Terraform uses an S3 bucket to store the remote state, enabling multiple users and GitHub Actions to share the same infrastructure state.                                                             |
+| `backend.tf`                                    | Remote Terraform State Management | Terraform uses an S3 bucket to store the remote state, enabling multiple users and GitHub Actions to share the same infrastructure state.                                                             |
 | `terraform/variables.tf`                        | Input Variables               | Declares configurable variables used throughout the Terraform configuration.                                                               |
 | `terraform/main.tf`                             | Infrastructure Definition     | Calls and configures Terraform modules that provision infrastructure resources.                                                          |
 | `terraform/outputs.tf`                          | Output Values                 | Displays useful information after deployment, such as server IP, VPC IP.                                                    |

@@ -6,9 +6,7 @@ The frontend is the React frontend for Zuri Market. It displays products fetched
 
 ## 2. Tech Stack
 
- Frontend: React, Vite
-
- DevOps: Nginx, Docker, Docker Hub, K3s (Kubernetes), Terraform, AWS Secrets Manager, AWS EC2, AWS VPC, AWS IAM,  Amazon S3 (with S3 Lockfile), GitHub Actions, Trivy.
+ Frontend: React, Vite, Nginx
 
 ## 3. Project Structure
 
@@ -73,7 +71,7 @@ zuriapp-frontend-main/
 
 
 
-To run the full application locally, please refer this documentation [here](./documentation/run-app-locally.md) for this section.
+To run the full application locally, please refer this documentation [here](/documentation/run-app-locally.md) for this section.
 
 ## 6. Building for Production
 

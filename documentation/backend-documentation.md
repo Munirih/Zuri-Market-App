@@ -8,7 +8,7 @@ The Backend is the REST API powering the Zuri Market ecommerce platform. It serv
 
  Node.js, Express.js, AWS SDK 
 
- DevOps: Docker, Docker Hub, K3s (Kubernetes), Terraform, AWS Secrets Manager, AWS EC2, AWS VPC, AWS IAM,  Amazon S3 (with S3 Lockfile), GitHub Actions, Trivy.
+
 
 ## 3. Backend folder Structure
 
@@ -93,11 +93,11 @@ as seen in the image below
 ![backend-run-local](./images/image-1.png)
 
 
-To run both frontend and backend locally, please refer this documentation [here](./documentation/run-app-locally.md).
+To run both frontend and backend locally, please refer this documentation [here](/documentation/run-app-locally.md).
 
 ## 6. API endpoints
 
-Please refer to the documentation [here](./documentation/api-endpoints.md) for this section.
+Please refer to the documentation [here](/documentation/api-endpoints.md) for this section.
 
 ## 7. Docker
 
@@ -172,7 +172,7 @@ munirihzowe/zuriapp-backend:<github-sha>
 This always points to the most recent successful build.
   
 
-To test the full frontend and backend application locally, please refer to the documentation [here](./documentation/docker-local-setup.md).
+To test the full frontend and backend application locally, please refer to the documentation [here](/documentation/docker-local-setup.md).
 
 ## 8. Deployment
 
@@ -183,5 +183,5 @@ The backend application uses the AWS SDK to securely fetch sensitive data from A
 
 ## 9. Secrets
 
- Please refer to the documentation [here](./documentation/secret-management.md) for this section.
+ Please refer to the documentation [here](/documentation/secret-management.md) for this section.
 
