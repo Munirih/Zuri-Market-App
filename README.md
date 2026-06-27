@@ -18,6 +18,15 @@ The project demonstrates modern DevOps and DevSecOps practices including:
 
 
 
+## 2. Pre-requisites
+
+
+- Docker and Docker Desktop
+- Node.js installed
+- AWS CLI installed
+- Terraform installed
+- AWS SDK Client manager installed in backend folder
+
 
 ## 2. Architecture Diagram
 
